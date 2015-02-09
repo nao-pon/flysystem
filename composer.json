@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "nao-pon/flysystem",
     "description": "Many filesystems, one API.",
     "keywords": [
         "filesystem", "files", "storage", "dropbox", "aws",
