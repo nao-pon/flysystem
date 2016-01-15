@@ -7,8 +7,8 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function testEmulateDirectories()
     {
         $input = [
-            ['dirname' => '', 'filename' => 'dummy'],
-            ['dirname' => 'something', 'filename' => 'dummy'],
+            ['dirname' => '', 'filename' => 'dummy', 'path' => 'dummy', 'type' => 'file'],
+            ['dirname' => 'something', 'filename' => 'dummy', 'path' => 'something/dummy', 'type' => 'file'],
             ['dirname' => 'something', 'path' => 'something/dirname', 'type' => 'dir'],
         ];
         $output = Util::emulateDirectories($input);
@@ -59,7 +59,6 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function testEnsureConfig()
     {
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig([]));
-        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig('string'));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(null));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config()));
     }
@@ -87,7 +86,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
      */
     public function testOutsideRootPath($path)
     {
-        Util::normalizePath('something/../../../hehe');
+        Util::normalizePath($path);
     }
 
     public function pathProvider()
@@ -95,6 +94,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
         return [
             ['/dirname/', 'dirname'],
             ['dirname/..', ''],
+            ['dirname/../', ''],
+            ['dirname./', 'dirname.'],
+            ['dirname/./', 'dirname'],
+            ['dirname/.', 'dirname'],
             ['./dir/../././', ''],
             ['00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'],
             ['/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'],

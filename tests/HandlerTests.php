@@ -3,9 +3,8 @@
 
 use League\Flysystem\Directory;
 use League\Flysystem\File;
-use Prophecy\PhpUnit\ProphecyTestCase;
 
-class HandlerTests extends ProphecyTestCase
+class HandlerTests extends \PHPUnit_Framework_TestCase
 {
     public function testFileRead()
     {
@@ -140,5 +139,14 @@ class HandlerTests extends ProphecyTestCase
         $dir->setFilesystem($filesystem);
         $output = $dir->getContents(true);
         $this->assertEquals($listing, $output);
+    }
+
+    public function testGetFilesystem()
+    {
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $filesystem = $prophecy->reveal();
+        $dir = new Directory(null, 'path');
+        $dir->setFilesystem($filesystem);
+        $this->assertEquals($filesystem, $dir->getFilesystem());
     }
 }
